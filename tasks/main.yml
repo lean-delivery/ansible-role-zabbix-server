@@ -32,42 +32,42 @@
     state: present
 
 - name: Replacing the commented entry with a valid parameter ( DBHost )
-  become: yes
+  become: True
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBHost=localhost$'
     replace: 'DBHost={{ z_dblocation }}'
 
 - name: Replacing the commented entry with a valid parameter ( DBPassword )
-  become: yes
+  become: True
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBPassword=$'
     replace: 'DBPassword={{ z_dbpass }}'
 
 - name: Starting and enabling Zabbix
-  become: yes
+  become: True
   service:
     name: zabbix-server
     state: started
     enabled: yes
 
 - name: Adding a timezone to the web config of Zabbix
-  become: yes
+  become: True
   lineinfile:
     path: '{{ z_webconfig }}'
     insertafter: '# php_value date.timezone'
     line: '        php_value date.timezone {{ z_timezone }}'
 
 - name: Starting and enabling httpd
-  become: yes
+  become: True
   service:
     name: httpd
     state: started
     enabled: yes
 
 - name: Starting and enabling zabbix-agent
-  become: yes
+  become: True
   service:
     name: zabbix-agent
     state: started
