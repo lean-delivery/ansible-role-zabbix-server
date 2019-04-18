@@ -23,7 +23,7 @@
     state: present
 
 - name: Installing a list of packages
-  become: yes
+  become: True
   yum:
     name:
       - zabbix-server-mysql  # This is the server package
