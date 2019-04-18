@@ -17,7 +17,7 @@
 #   become: yes
 
 - name: Installing Zabbix repository
-  become: yes
+  become: True
   yum:
     name: '{{ z_repo }}'
     state: present
