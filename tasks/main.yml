@@ -19,6 +19,10 @@
 - name: Installing Zabbix repository
   become: True
   yum:
+    register: task_result_1
+    until: task_result_1 is success
+    retries: 3
+    delay: 2
     name: '{{ z_repo }}'
     state: present
 
