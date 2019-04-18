@@ -7,3 +7,4 @@ z_dblocation: localhost                                   # set your host's dns 
 z_dbpass: 1                                               # set your password for DB here
 z_webconfig: /etc/httpd/conf.d/zabbix.conf
 z_timezone: Europe/Moscow                                 # set your timezone here
+
