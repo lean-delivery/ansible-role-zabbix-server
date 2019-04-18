@@ -34,6 +34,10 @@
       - zabbix-web-mysql
       - zabbix-agent
     state: present
+  register: task_result_2
+  retries: 3
+  delay: 2
+  until: task_result_2 is success
 
 - name: Replacing the commented entry with a valid parameter ( DBHost )
   become: True
