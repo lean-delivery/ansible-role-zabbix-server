@@ -1,0 +1,74 @@
+---
+# tasks file for zabbix-server-new-2
+
+# 1.Updating the system (uncomment if necessary)
+
+# - name: Updating the system
+#   yum:
+#     name: '*'
+#     state: latest
+#   become: yes
+#
+# 2.Switching off SELinux (uncomment if necessary)
+#
+# - name: Switching off SELinux
+#   selinux:
+#     state: disabled
+#   become: yes
+
+- name: Installing Zabbix repository
+  become: yes
+  yum:
+    name: '{{ z_repo }}'
+    state: present
+
+- name: Installing a list of packages
+  become: yes
+  yum:
+    name:
+      - zabbix-server-mysql  # This is the server package
+      - zabbix-web-mysql
+      - zabbix-agent
+    state: present
+
+- name: Replacing the commented entry with a valid parameter ( DBHost )
+  become: yes
+  replace:
+    dest: '{{ z_config }}'
+    regexp: '^# DBHost=localhost$'
+    replace: 'DBHost={{ z_dblocation }}'
+
+- name: Replacing the commented entry with a valid parameter ( DBPassword )
+  become: yes
+  replace:
+    dest: '{{ z_config }}'
+    regexp: '^# DBPassword=$'
+    replace: 'DBPassword={{ z_dbpass }}'
+
+- name: Starting and enabling Zabbix
+  become: yes
+  service:
+    name: zabbix-server
+    state: started
+    enabled: yes
+
+- name: Adding a timezone to the web config of Zabbix
+  become: yes
+  lineinfile:
+    path: '{{ z_webconfig }}'
+    insertafter: '# php_value date.timezone'
+    line: '        php_value date.timezone {{ z_timezone }}'
+
+- name: Starting and enabling httpd
+  become: yes
+  service:
+    name: httpd
+    state: started
+    enabled: yes
+
+- name: Starting and enabling zabbix-agent
+  become: yes
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: yes
