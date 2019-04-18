@@ -50,7 +50,7 @@
   service:
     name: zabbix-server
     state: started
-    enabled: yes
+    enabled: True
 
 - name: Adding a timezone to the web config of Zabbix
   become: True
@@ -64,11 +64,11 @@
   service:
     name: httpd
     state: started
-    enabled: yes
+    enabled: True
 
 - name: Starting and enabling zabbix-agent
   become: True
   service:
     name: zabbix-agent
     state: started
-    enabled: yes
+    enabled: True
