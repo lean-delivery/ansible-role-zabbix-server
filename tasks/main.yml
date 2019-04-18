@@ -19,12 +19,12 @@
 - name: Installing Zabbix repository
   become: True
   yum:
-    register: task_result_1
-    until: task_result_1 is success
-    retries: 3
-    delay: 2
     name: '{{ z_repo }}'
     state: present
+  register: task_result_1
+  retries: 3
+  delay: 2
+  until: task_result_1 is success
 
 - name: Installing a list of packages
   become: True
