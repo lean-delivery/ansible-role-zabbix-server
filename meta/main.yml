@@ -1,10 +1,10 @@
 ---
 galaxy_info:
-  role_name: zabbix_server_new_2
+  role_name: ansible-role-zabbix-server
   author: Lean Delivery Team <team@lean-delivery.com>
   description: Yet Another Ansible Role From Lean Delivery
   company: EPAM Systems
-  issue_tracker_url: https://github.com/lean-delivery/ansible-role-zabbix-server-new-2/issues
+  issue_tracker_url: https://github.com/lean-delivery/ansible-role-zabbix-server/issues
   license: Apache
   min_ansible_version: 2.5
   platforms: [{name: [EL], versions: [7]}]

@@ -10,14 +10,14 @@ lint:
   options:
     config-file: .yamllint
 platforms:
-  - name: test-epc-centos7-zabbix-server-new-2
+  - name: test-epc-centos7-ansible-role-zabbix-server
     image: CentOS7_64-bit
     shape: small
     region: EPAM-BY2
     wait_timeout: 3600
     groups:
       - rhel_family
-  - name: test-epc-ubuntu1804-zabbix-server-new-2
+  - name: test-epc-ubuntu1804-ansible-role-zabbix-server
     image: Ubuntu18.04_64-bit
     shape: small
     region: EPAM-BY2
