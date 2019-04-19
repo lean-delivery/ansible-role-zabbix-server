@@ -1,5 +1,6 @@
 ---
 - name: Converge
-  hosts: all
+# hosts: all
+  hosts: rhel_family
   roles:
     - role: ansible-role-zabbix-server
