@@ -1,5 +1,5 @@
 ---
-# tasks file for zabbix-server-new-2
+# tasks file for ansible-role-zabbix-server
 
 # 1.Updating the system (uncomment if necessary)
 
