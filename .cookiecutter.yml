@@ -1,3 +1,4 @@
 ---
+### test
 default_context:
-  role_name: zabbix-server-new-2
+  role_name: ansible-role-zabbix-server 

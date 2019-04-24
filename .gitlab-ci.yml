@@ -25,14 +25,14 @@ Ansible lint:
   tags:
     - aws
 
-Docker zabbix-server-new-2:
+Docker ansible-role-zabbix-server:
   stage: deployment test
   script:
     - molecule test -s default
   tags:
     - aws
 
-AWS zabbix-server-new-2:
+.AWS ansible-role-zabbix-server:
   variables:
     AWS_REGION: us-east-1
   stage: deployment test
@@ -41,7 +41,7 @@ AWS zabbix-server-new-2:
   tags:
     - aws
 
-# AWS Windows zabbix-server-new-2:
+# AWS Windows ansible-role-zabbix-server:
 #   variables:
 #     AWS_REGION: us-east-1
 #   stage: deployment test
@@ -50,7 +50,7 @@ AWS zabbix-server-new-2:
 #   tags:
 #     - aws
 
-EPC zabbix-server-new-2:
+.EPC ansible-role-zabbix-server:
   variables:
     EPC_REGION: EPAM-BY2
   stage: deployment test
