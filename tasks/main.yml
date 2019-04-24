@@ -46,12 +46,35 @@
     regexp: '^# DBHost=localhost$'
     replace: 'DBHost={{ z_dblocation }}'
 
+#- name: Putting DB name into my.cnf
+#  become: True
+#  ini_file:
+#    path: /etc/my.cnf
+#    section: client
+#    option: user
+#    value: zabbix
+#    backup: yes
+
+#- name: Putting DB name into my.cnf
+#  become: True
+#  ini_file:
+#    path: /etc/my.cnf
+#    section: client
+#    option: password
+#    value: 1
+#    backup: yes
+
 - name: Replacing the commented entry with a valid parameter ( DBPassword )
   become: True
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBPassword=$'
     replace: 'DBPassword={{ z_dbpass }}'
+
+- name: Importing DB scheme
+  shell: 'zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p1'
+  args:
+    executable: /bin/bash 
 
 - name: Starting and enabling Zabbix
   become: True
