@@ -1,9 +1,9 @@
-zabbix-server-new-2 role
+ansible-role-zabbix-server
 =========
-[![License](https://img.shields.io/badge/license-Apache-green.svg?style=flat)](https://raw.githubusercontent.com/lean-delivery/ansible-role-zabbix-server-new-2/master/LICENSE)
-[![Build Status](https://travis-ci.org/lean-delivery/ansible-role-zabbix-server-new-2.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-zabbix-server-new-2)
-[![Build Status](https://gitlab.com/lean-delivery/ansible-role-zabbix-server-new-2/badges/master/build.svg)](https://gitlab.com/lean-delivery/ansible-role-zabbix-server-new-2)
-[![Galaxy](https://img.shields.io/badge/galaxy-lean__delivery.zabbix-server-new-2-blue.svg)](https://galaxy.ansible.com/lean_delivery/zabbix-server-new-2)
+[![License](https://img.shields.io/badge/license-Apache-green.svg?style=flat)](https://raw.githubusercontent.com/lean-delivery/ansible-role-zabbix-server/master/LICENSE)
+[![Build Status](https://travis-ci.org/lean-delivery/ansible-role-zabbix-server.svg?branch=master)](https://travis-ci.org/lean-delivery/ansible-role-zabbix-server)
+[![Build Status](https://gitlab.com/lean-delivery/ansible-role-zabbix-server/badges/master/build.svg)](https://gitlab.com/lean-delivery/ansible-role-zabbix-server)
+[![Galaxy](https://img.shields.io/badge/galaxy-lean__delivery.ansible-role-zabbix-server-blue.svg)](https://galaxy.ansible.com/lean_delivery/ansible-role-zabbix-server)
 ![Ansible](https://img.shields.io/ansible/role/d/role_id.svg)
 ![Ansible](https://img.shields.io/badge/dynamic/json.svg?label=min_ansible_version&url=https%3A%2F%2Fgalaxy.ansible.com%2Fapi%2Fv1%2Froles%2Frole_id%2F&query=$.min_ansible_version)
 
@@ -40,7 +40,7 @@ passed in as parameters) is always nice for users too:
 
     - hosts: servers
       roles:
-         - { role: zabbix-server-new-2, x: 42 }
+         - { role: ansible-role-zabbix-server, x: 42 }
 
 License
 -------
