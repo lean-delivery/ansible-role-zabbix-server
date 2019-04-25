@@ -12,4 +12,5 @@
       mysql_users:
         - name: zabbix
           password: 1
+          priv: "zabbix.*:zabbix"
     - role: ansible-role-zabbix-server

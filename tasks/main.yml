@@ -71,10 +71,18 @@
     regexp: '^# DBPassword=$'
     replace: 'DBPassword={{ z_dbpass }}'
 
+# - name: Importing DB scheme
+#   shell: 'zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p1'
+#   args:
+#     executable: /bin/bash
+
 - name: Importing DB scheme
-  shell: 'zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p1'
-  args:
-    executable: /bin/bash 
+  mysql_db:
+    name: zabbix
+    login_user: zabbix
+    login_password: 1
+    state: import
+    target: /usr/share/doc/zabbix-server-mysql-4.2.1/create.sql.gz
 
 - name: Starting and enabling Zabbix
   become: True
