@@ -78,6 +78,7 @@
 
 - shell: mysqlshow --user=zabbix --password=1 zabbix | wc -l
   register: tables_quantity
+  changed_when: False
 
 - name: Importing DB scheme
   mysql_db:
