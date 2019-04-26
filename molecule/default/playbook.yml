@@ -3,7 +3,7 @@
 # hosts: all
   hosts: rhel_family
   roles:
-    - role: ansible-role-mysql
+    - role: lean_delivery.mysql
       mysql_daemon: mariadb
       mysql_root_password: 1
       mysql_databases:
