@@ -79,7 +79,7 @@
 - name: Counting the quantity of tables
   shell: |
     set -o pipefail
-  shell: 'mysqlshow --user=root --password=1 zabbix | grep -v "Database: zabbix" | grep -v Tables | grep -v +-- | wc -l'
+    'mysqlshow --user=root --password=1 zabbix | grep -v "Database: zabbix" | grep -v Tables | grep -v +-- | wc -l'
   register: tables_quantity
   changed_when: False                                                            # checking the exit code of the command
 
