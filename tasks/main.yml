@@ -84,25 +84,33 @@
 #  changed_when: False                                                     # checking the exit code of the command
 ## ignore_errors: True
 
-- name: Counting the quantity of tables
-  shell: |
-    set -o pipefail
-    mysqlshow --user=root --password=1 zabbix | wc -l
-  register: tables_quantity
-  changed_when: False
+# - name: Counting the quantity of tables
+#   shell: |
+#     set -o pipefail
+#     mysqlshow --user=root --password=1 zabbix | wc -l
+#   register: tables_quantity
+#   changed_when: False
 
-- name: Print
-  debug:
-    var: tables_quantity.stdout
 
-- name: Importing DB scheme
-  mysql_db:
-    name: zabbix
-    login_user: zabbix
-    login_password: 1
-    state: import
-    target: /usr/share/doc/zabbix-server-mysql-4.2.1/create.sql.gz
-  when: tables_quantity.stdout == "5"
+# - name: Print
+#   debug:
+#     var: tables_quantity.stdout
+
+- name: Importing DB scheme 
+  block: 
+    - name: Importing 
+      mysql_db:
+        name: zabbix
+        login_user: zabbix
+        login_password: 1
+        state: import
+        target: /usr/share/doc/zabbix-server-mysql-4.2.1/create.sql.gz
+  rescue:
+    - name: The schema exists
+      debug:
+        msg: " THE SCHEMA EXISTS ! "
+
+# when: tables_quantity.stdout == "5"
 
 - name: Starting and enabling Zabbix
   become: True
