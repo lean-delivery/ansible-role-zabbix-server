@@ -96,6 +96,15 @@
 #   debug:
 #     var: tables_quantity.stdout
 
+- name: Checking cat existence
+  shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
+  register: existence
+
+- name: Print
+  debug:
+    var: existence.stdout
+
+
 - name: Importing DB scheme
   block:
     - name: Importing
