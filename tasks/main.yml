@@ -99,6 +99,7 @@
 - name: Checking cat existence
   shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
   register: existence
+  changed_when: False
 
 - name: Print
   debug:
