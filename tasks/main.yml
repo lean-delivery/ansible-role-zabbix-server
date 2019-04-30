@@ -96,9 +96,9 @@
 #   debug:
 #     var: tables_quantity.stdout
 
-- name: Importing DB scheme 
-  block: 
-    - name: Importing 
+- name: Importing DB scheme
+  block:
+    - name: Importing
       mysql_db:
         name: zabbix
         login_user: zabbix
