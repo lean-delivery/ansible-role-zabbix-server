@@ -17,7 +17,6 @@
 #   become: yes
 
 - block: For Red Hat OS family
-
     - name: Installing Zabbix repository
       become: True
       yum:
@@ -40,7 +39,6 @@
       retries: 3
       delay: 2
       until: task_result_2 is success
-
   when: ansible_os_family == "RedHat"
 
 - block: For Debian OS family
