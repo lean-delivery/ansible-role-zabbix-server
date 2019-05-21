@@ -18,6 +18,13 @@
 
 - name: For Red Hat OS family
   block:
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
+
     - name: Installing Zabbix repository
       become: True
       yum:
@@ -44,6 +51,12 @@
 
 - name: For Debian OS family
   block:
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
+    - debug:
+      msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
     # Temporary block 2
     - name: Print Debian repo
       debug:
