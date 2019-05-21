@@ -64,7 +64,11 @@
     - name: Renewing packages list ( "sudo apt update" )
       become: True
       apt:
-        update_cache: yes
+        update_cache: True
+      register: task_result_4
+      retries: 3
+      delay: 2
+      until: task_result_4 is success
 
     - name: Installing the list of packages
       become: True
@@ -74,10 +78,10 @@
           - zabbix-frontend-php
           - zabbix-agent
         state: present
-      register: task_result_4
+      register: task_result_5
       retries: 3
       delay: 2
-      until: task_result_4 is success
+      until: task_result_5 is success
   when: ansible_os_family == "Debian"
 
 - name: Replacing the commented entry with a valid parameter ( DBHost )
