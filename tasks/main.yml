@@ -16,7 +16,8 @@
 #     state: disabled
 #   become: yes
 
-- block: For Red Hat OS family
+- name: For Red Hat OS family
+  block:
     - name: Installing Zabbix repository
       become: True
       yum:
@@ -41,17 +42,29 @@
       until: task_result_2 is success
   when: ansible_os_family == "RedHat"
 
-- block: For Debian OS family
+- name: For Debian OS family
+  block:
+    # Temporary block 2
+    - name: Print Debian repo
+      debug:
+        var: z_repo_deb
 
     - name: Installing Zabbix repository
       become: True
       apt:
-        name: '{{ z_repo_deb }}'
-        state: present
+        deb: '{{ z_repo_deb }}'
+#       name: '{{ z_repo_deb }}'
+#       name: "https://repo.zabbix.com/zabbix/4.2/debian/pool/main/z/zabbix-release/zabbix-release_4.2-1+stretch_all.deb"
+#       state: present
       register: task_result_3
       retries: 3
       delay: 2
       until: task_result_3 is success
+
+    - name: Renewing packages list ( "sudo apt update" )
+      become: True
+      apt:
+        update_cache: yes
 
     - name: Installing the list of packages
       become: True
@@ -65,7 +78,6 @@
       retries: 3
       delay: 2
       until: task_result_4 is success
-
   when: ansible_os_family == "Debian"
 
 - name: Replacing the commented entry with a valid parameter ( DBHost )
@@ -125,11 +137,44 @@
 #   debug:
 #     var: tables_quantity.stdout
 
-- block: For Red Hat OS family
+- name: For Red Hat OS family
+  block:
 
 # Temporary block
-    - name: Checking cat existence
-      shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
+    - name: Checking catalog existence
+#     shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
+      shell: if [ -d /usr/share/doc/zabbix-server-mysql-{{ z_version }} ]; then echo 'The directory exists'; fi
+      register: existence
+      changed_when: False
+
+# Temporary block 2
+    - name: Print
+      debug:
+        var: existence.stdout
+
+    - name: Importing DB scheme
+      block:
+        - name: Importing
+          mysql_db:
+            name: zabbix
+            login_user: zabbix
+            login_password: 1
+            state: import
+#           target: /usr/share/doc/zabbix-server-mysql-4.2.1/create.sql.gz
+            target: /usr/share/doc/zabbix-server-mysql-{{ z_version }}/create.sql.gz
+      rescue:
+        - name: The schema exists
+          debug:
+            msg: " THE SCHEMA EXISTS ! "
+
+  when: ansible_os_family == "RedHat"
+
+- name: For Debian OS family
+  block:
+
+# Temporary block
+    - name: Checking catalog existence
+      shell: if [ -d /usr/share/doc/zabbix-server-mysql ]; then echo 'The directory exists'; fi
       register: existence
       changed_when: False
 
@@ -147,13 +192,16 @@
             login_user: zabbix
             login_password: 1
             state: import
-            target: /usr/share/doc/zabbix-server-mysql-4.2.1/create.sql.gz
+            target: /usr/share/doc/zabbix-server-mysql/create.sql.gz
       rescue:
         - name: The schema exists
           debug:
             msg: " THE SCHEMA EXISTS ! "
 
-# when: tables_quantity.stdout == "5"
+  when: ansible_os_family == "Debian"
+
+- name: For Red Hat OS family
+  block:
 
     - name: Adding a timezone to the web config of Zabbix
       become: True
@@ -162,19 +210,6 @@
         insertafter: '# php_value date.timezone'
         line: '        php_value date.timezone {{ z_timezone }}'
 
-  when: ansible_os_family == "RedHat"
-
-- block: For Debian OS family
-
-    - name: Adding a timezone to the web config of Zabbix
-      become: True
-      lineinfile:
-        path: '{{ z_webconfig_deb }}'
-        insertafter: '# php_value date.timezone'
-        line: '        php_value date.timezone {{ z_timezone }}'  
-
-  when: ansible_os_family == "Debian"
-
     - name: Starting and enabling httpd
       become: True
       service:
@@ -182,32 +217,25 @@
         state: started
         enabled: True
 
-# when: ansible_os_family == "RedHat"
- 
-- block: For Debian OS family  
+  when: ansible_os_family == "RedHat"
 
-    - name: Installing Zabbix repository
-      become: True
-      apt:
-        name: '{{ z_repo_deb }}'
-        state: present
-      register: task_result_3
-      retries: 3
-      delay: 2
-      until: task_result_3 is success
+- name: For Debian OS family
+  block:
 
-    - name: Installing the list of packages
+    - name: Adding a timezone to the web config of Zabbix
       become: True
-      apt:
-        name:
-          - zabbix-server-mysql  # This is the server package
-          - zabbix-frontend-php
-          - zabbix-agent
-        state: present
-      register: task_result_4
-      retries: 3
-      delay: 2
-      until: task_result_4 is success
+      lineinfile:
+        path: '{{ z_webconfig_deb }}'
+#       regexp: '^# php_value date.timezone '                                # There are 2 such strings in the file in Debian 
+        insertafter: '# php_value date.timezone'
+        line: '        php_value date.timezone {{ z_timezone }}'
+
+    - name: Starting and enabling apache2
+      become: True
+      service:
+        name: apache2
+        state: started
+        enabled: True
 
   when: ansible_os_family == "Debian"
 

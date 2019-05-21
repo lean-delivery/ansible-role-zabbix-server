@@ -1,7 +1,7 @@
 ---
 # defaults file for ansible-role-zabbix-server
 z_repo: http://repo.zabbix.com/zabbix/4.2/rhel/7/x86_64/zabbix-release-4.2-1.el7.noarch.rpm
-# z_version: 4.2.1
+z_version: 4.2.1
 z_config: /etc/zabbix/zabbix_server.conf
 z_dblocation: localhost                                   # set your host's dns name or ip address here
 z_dbpass: 1                                               # set your password for DB here
@@ -9,4 +9,5 @@ z_webconfig: /etc/httpd/conf.d/zabbix.conf
 z_timezone: Europe/Moscow                                 # set your timezone here
 
 z_repo_deb: https://repo.zabbix.com/zabbix/4.2/debian/pool/main/z/zabbix-release/zabbix-release_4.2-1+stretch_all.deb
-z_webconfig_deb: /etc/apache2/conf-available/zabbix-frontend-php.conf
+# z_repo_deb: https://repo.zabbix.com/zabbix/4.1/debian/pool/main/z/zabbix-release/zabbix-release_4.1-1+stretch_all.deb
+z_webconfig_deb: /etc/apache2/conf-available/zabbix.conf
