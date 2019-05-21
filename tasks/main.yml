@@ -230,7 +230,7 @@
       become: True
       lineinfile:
         path: '{{ z_webconfig_deb }}'
-#       regexp: '^# php_value date.timezone '                                # There are 2 such strings in the file in Debian 
+#       regexp: '^# php_value date.timezone '                                # There are 2 such strings in the file in Debian
         insertafter: '# php_value date.timezone'
         line: '        php_value date.timezone {{ z_timezone }}'
 
