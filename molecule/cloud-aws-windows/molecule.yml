@@ -16,7 +16,7 @@ platforms:
     aws_region: us-east-1
     instance_type: m5.large
     vpc_subnet_id: subnet-05a2ef2b767afec50
-    assign_public_ip: False
+    assign_public_ip: false
     spot_price: 0.14
     aws_sec_group:
       - default
@@ -25,7 +25,7 @@ platforms:
       - windows
 provisioner:
   name: ansible
-  log: False
+  log: false
   connection_options:
     ansible_connection: winrm
   inventory:

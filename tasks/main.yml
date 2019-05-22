@@ -136,7 +136,7 @@
 #    set -o pipefail
 #    mysqlshow --user=root --password=1 zabbix | grep -v "Database: zabbix" | grep -v Tables | grep -v +-- | wc -l
 #  register: tables_quantity
-#  changed_when: False                                                     # checking the exit code of the command
+#  changed_when: false                                                     # checking the exit code of the command
 ## ignore_errors: true
 
 # - name: Counting the quantity of tables
@@ -144,7 +144,7 @@
 #     set -o pipefail
 #     mysqlshow --user=root --password=1 zabbix | wc -l
 #   register: tables_quantity
-#   changed_when: False
+#   changed_when: false
 
 
 # - name: Print
@@ -159,7 +159,7 @@
 #     shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
       shell: if [ -d /usr/share/doc/zabbix-server-mysql-{{ z_version }} ]; then echo 'The directory exists'; fi
       register: existence
-      changed_when: False
+      changed_when: false
 
 # Temporary block 2
     - name: Print
@@ -190,7 +190,7 @@
     - name: Checking catalog existence
       shell: if [ -d /usr/share/doc/zabbix-server-mysql ]; then echo 'The directory exists'; fi
       register: existence
-      changed_when: False
+      changed_when: false
 
 # Temporary block 2
     - name: Print
