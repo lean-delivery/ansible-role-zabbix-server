@@ -66,9 +66,6 @@
       become: True
       apt:
         deb: '{{ z_repo_deb }}'
-#       name: '{{ z_repo_deb }}'
-#       name: "https://repo.zabbix.com/zabbix/4.2/debian/pool/main/z/zabbix-release/zabbix-release_4.2-1+stretch_all.deb"
-#       state: present
       register: task_result_3
       retries: 3
       delay: 2
