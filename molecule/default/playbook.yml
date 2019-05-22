@@ -1,7 +1,7 @@
 ---
 - name: Converge
-# hosts: all
-  hosts: rhel_family
+  hosts: all
+# hosts: rhel_family
   roles:
     - role: lean_delivery.mysql
       mysql_daemon: mariadb
