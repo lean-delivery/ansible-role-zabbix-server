@@ -32,7 +32,7 @@ Docker ansible-role-zabbix-server:
   tags:
     - aws
 
-.AWS ansible-role-zabbix-server:
+AWS ansible-role-zabbix-server:
   variables:
     AWS_REGION: us-east-1
   stage: deployment test
