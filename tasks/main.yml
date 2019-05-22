@@ -26,7 +26,7 @@
         msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
 
     - name: Installing Zabbix repository
-      become: True
+      become: true
       yum:
         name: '{{ z_repo }}'
         state: present
@@ -36,7 +36,7 @@
       until: task_result_1 is success
 
     - name: Installing the list of packages
-      become: True
+      become: true
       yum:
         name:
           - zabbix-server-mysql  # This is the server package
@@ -63,7 +63,7 @@
         var: z_repo_deb
 
     - name: Installing Zabbix repository
-      become: True
+      become: true
       apt:
         deb: '{{ z_repo_deb }}'
       register: task_result_3
@@ -72,16 +72,16 @@
       until: task_result_3 is success
 
     - name: Renewing packages list ( "sudo apt update" )
-      become: True
+      become: true
       apt:
-        update_cache: True
+        update_cache: true
       register: task_result_4
       retries: 3
       delay: 2
       until: task_result_4 is success
 
     - name: Installing the list of packages
-      become: True
+      become: true
       apt:
         name:
           - zabbix-server-mysql  # This is the server package
@@ -95,14 +95,14 @@
   when: ansible_os_family == "Debian"
 
 - name: Replacing the commented entry with a valid parameter ( DBHost )
-  become: True
+  become: true
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBHost=localhost$'
     replace: 'DBHost={{ z_dblocation }}'
 
 #- name: Putting DB name into my.cnf
-#  become: True
+#  become: true
 #  ini_file:
 #    path: /etc/my.cnf
 #    section: client
@@ -111,7 +111,7 @@
 #    backup: yes
 
 #- name: Putting DB name into my.cnf
-#  become: True
+#  become: true
 #  ini_file:
 #    path: /etc/my.cnf
 #    section: client
@@ -120,7 +120,7 @@
 #    backup: yes
 
 - name: Replacing the commented entry with a valid parameter ( DBPassword )
-  become: True
+  become: true
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBPassword=$'
@@ -137,7 +137,7 @@
 #    mysqlshow --user=root --password=1 zabbix | grep -v "Database: zabbix" | grep -v Tables | grep -v +-- | wc -l
 #  register: tables_quantity
 #  changed_when: False                                                     # checking the exit code of the command
-## ignore_errors: True
+## ignore_errors: true
 
 # - name: Counting the quantity of tables
 #   shell: |
@@ -218,18 +218,18 @@
   block:
 
     - name: Adding a timezone to the web config of Zabbix
-      become: True
+      become: true
       lineinfile:
         path: '{{ z_webconfig }}'
         insertafter: '# php_value date.timezone'
         line: '        php_value date.timezone {{ z_timezone }}'
 
     - name: Starting and enabling httpd
-      become: True
+      become: true
       service:
         name: httpd
         state: started
-        enabled: True
+        enabled: true
 
   when: ansible_os_family == "RedHat"
 
@@ -237,7 +237,7 @@
   block:
 
     - name: Adding a timezone to the web config of Zabbix
-      become: True
+      become: true
       lineinfile:
         path: '{{ z_webconfig_deb }}'
 #       regexp: '^# php_value date.timezone '                                # There are 2 such strings in the file in Debian
@@ -245,24 +245,24 @@
         line: '        php_value date.timezone {{ z_timezone }}'
 
     - name: Starting and enabling apache2
-      become: True
+      become: true
       service:
         name: apache2
         state: started
-        enabled: True
+        enabled: true
 
   when: ansible_os_family == "Debian"
 
 - name: Starting and enabling Zabbix
-  become: True
+  become: true
   service:
     name: zabbix-server
     state: started
-    enabled: True
+    enabled: true
 
 - name: Starting and enabling zabbix-agent
-  become: True
+  become: true
   service:
     name: zabbix-agent
     state: started
-    enabled: True
+    enabled: true

@@ -31,7 +31,7 @@ provisioner:
   inventory:
     group_vars:
       windows:
-        ansible_password: "{{ lookup('env', 'WINRM_ADMIN_PWD') | default('M0leCule123!', True) }}"
+        ansible_password: "{{ lookup('env', 'WINRM_ADMIN_PWD') | default('M0leCule123!', true) }}"
         ansible_winrm_transport: credssp
         ansible_winrm_server_cert_validation: ignore
   playbooks:
