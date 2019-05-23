@@ -1,2 +1,8 @@
 ---
 # handlers file for ansible-role-zabbix-server
+
+- name: Reload Apache
+  become: true
+  service:
+    name: apache2
+    state: reloaded

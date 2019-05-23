@@ -235,7 +235,7 @@
 - name: For Debian OS family
   block:
 
-    - name: Adding a timezone to the web config of Zabbix
+    - name: Adding a timezone to Zabbix web config
       become: true
       lineinfile:
         path: '{{ z_webconfig_deb }}'
@@ -243,11 +243,24 @@
         insertafter: '# php_value date.timezone'
         line: '        php_value date.timezone {{ z_timezone }}'
 
-    - name: Starting and enabling apache2
-      become: true
-      service:
-        name: apache2
-        state: started
-        enabled: true
+    - name: Check that you can connect (GET) to a page and it returns a status 200
+      uri:
+        url: http://{{ z_ipaddr }}/zabbix
+        return_content: yes
+      register: web_result
+#     notify: Reload Apache
+    
+#   - name: Print 2
+#     debug: web_result.stderr
+    - debug:
+        var: web_result.stdout 
+
+
+#    - name: Starting and enabling apache2
+#      become: true
+#      service:
+#        name: apache2
+#        state: started
+#        enabled: true
 
   when: ansible_os_family == "Debian"
