@@ -249,7 +249,7 @@
         return_content: true
       register: web_result
 #     notify: Reload Apache
-    
+
 #   - name: Print 2
 #     debug: web_result.stderr
     - debug:
