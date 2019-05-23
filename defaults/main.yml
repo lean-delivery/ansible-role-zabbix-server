@@ -9,5 +9,4 @@ z_webconfig: /etc/httpd/conf.d/zabbix.conf
 z_timezone: Europe/Moscow                                 # set your timezone here
 
 z_repo_deb: https://repo.zabbix.com/zabbix/4.2/debian/pool/main/z/zabbix-release/zabbix-release_4.2-1+stretch_all.deb
-# z_repo_deb: https://repo.zabbix.com/zabbix/4.1/debian/pool/main/z/zabbix-release/zabbix-release_4.1-1+stretch_all.deb
 z_webconfig_deb: /etc/apache2/conf-available/zabbix.conf

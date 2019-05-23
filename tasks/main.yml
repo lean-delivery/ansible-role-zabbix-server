@@ -1,24 +1,9 @@
 ---
 # tasks file for ansible-role-zabbix-server
 
-# 1.Updating the system (uncomment if necessary)
-
-# - name: Updating the system
-#   yum:
-#     name: '*'
-#     state: latest
-#   become: yes
-#
-# 2.Switching off SELinux (uncomment if necessary)
-#
-# - name: Switching off SELinux
-#   selinux:
-#     state: disabled
-#   become: yes
-
-- name: For Red Hat OS family
+- name: For Red Hat OS family   
   block:
-    - debug:
+    - debug:                     # Test part
         msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
     - debug:
         msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
@@ -39,7 +24,7 @@
       become: true
       yum:
         name:
-          - zabbix-server-mysql  # This is the server package
+          - zabbix-server-mysql  # This is a server package
           - zabbix-web-mysql
           - zabbix-agent
         state: present
@@ -51,13 +36,13 @@
 
 - name: For Debian OS family
   block:
-    - debug:
+    - debug:                     # Test part
         msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
     - debug:
         msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
     - debug:
         msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
-    # Temporary block 2
+                                 # Test part
     - name: Print Debian repo
       debug:
         var: z_repo_deb
@@ -154,14 +139,14 @@
 - name: For Red Hat OS family
   block:
 
-# Temporary block
+                                 # Test part
     - name: Checking catalog existence
 #     shell: if [ -d /usr/share/doc/zabbix-server-mysql-4.2.1 ]; then echo 'The directory exists'; fi
       shell: if [ -d /usr/share/doc/zabbix-server-mysql-{{ z_version }} ]; then echo 'The directory exists'; fi
       register: existence
       changed_when: false
 
-# Temporary block 2
+                                 # Test part
     - name: Print
       debug:
         var: existence.stdout
@@ -186,13 +171,13 @@
 - name: For Debian OS family
   block:
 
-# Temporary block
+                                 # Test part
     - name: Checking catalog existence
       shell: if [ -d /usr/share/doc/zabbix-server-mysql ]; then echo 'The directory exists'; fi
       register: existence
       changed_when: false
 
-# Temporary block 2
+                                 # Test part
     - name: Print
       debug:
         var: existence.stdout
@@ -213,6 +198,20 @@
             msg: " THE SCHEMA EXISTS ! "
 
   when: ansible_os_family == "Debian"
+
+- name: Starting and enabling zabbix-server
+  become: true
+  service:
+    name: zabbix-server
+    state: started
+    enabled: true
+
+- name: Starting and enabling zabbix-agent
+  become: true
+  service:
+    name: zabbix-agent
+    state: started
+    enabled: true
 
 - name: For Red Hat OS family
   block:
@@ -248,21 +247,7 @@
       become: true
       service:
         name: apache2
-        state: reloaded
+        state: started
         enabled: true
 
   when: ansible_os_family == "Debian"
-
-- name: Starting and enabling Zabbix
-  become: true
-  service:
-    name: zabbix-server
-    state: started
-    enabled: true
-
-- name: Starting and enabling zabbix-agent
-  become: true
-  service:
-    name: zabbix-agent
-    state: started
-    enabled: true
