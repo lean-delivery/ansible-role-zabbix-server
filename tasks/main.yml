@@ -246,14 +246,14 @@
     - name: Check that you can connect (GET) to a page and it returns a status 200
       uri:
         url: http://{{ z_ipaddr }}/zabbix
-        return_content: yes
+        return_content: true
       register: web_result
 #     notify: Reload Apache
     
 #   - name: Print 2
 #     debug: web_result.stderr
     - debug:
-        var: web_result.stdout 
+        var: web_result.stdout
 
 
 #    - name: Starting and enabling apache2
