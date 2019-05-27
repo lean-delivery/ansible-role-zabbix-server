@@ -69,7 +69,7 @@
       become: true
       apt:
         name:
-          - zabbix-server-mysql  # This is the server package
+          - zabbix-server-mysql  # This is a server package
           - zabbix-frontend-php
           - zabbix-agent
         state: present
@@ -86,55 +86,12 @@
     regexp: '^# DBHost=localhost$'
     replace: 'DBHost={{ z_dblocation }}'
 
-#- name: Putting DB name into my.cnf
-#  become: true
-#  ini_file:
-#    path: /etc/my.cnf
-#    section: client
-#    option: user
-#    value: zabbix
-#    backup: yes
-
-#- name: Putting DB name into my.cnf
-#  become: true
-#  ini_file:
-#    path: /etc/my.cnf
-#    section: client
-#    option: password
-#    value: 1
-#    backup: yes
-
 - name: Replacing the commented entry with a valid parameter ( DBPassword )
   become: true
   replace:
     dest: '{{ z_config }}'
     regexp: '^# DBPassword=$'
     replace: 'DBPassword={{ z_dbpass }}'
-
-# - name: Importing DB scheme
-#   shell: 'zcat /usr/share/doc/zabbix-server-mysql*/create.sql.gz | mysql -uzabbix -p1'
-#   args:
-#     executable: /bin/bash
-
-#- name: Counting the quantity of tables
-#  shell: |
-#    set -o pipefail
-#    mysqlshow --user=root --password=1 zabbix | grep -v "Database: zabbix" | grep -v Tables | grep -v +-- | wc -l
-#  register: tables_quantity
-#  changed_when: false                                                     # checking the exit code of the command
-## ignore_errors: true
-
-# - name: Counting the quantity of tables
-#   shell: |
-#     set -o pipefail
-#     mysqlshow --user=root --password=1 zabbix | wc -l
-#   register: tables_quantity
-#   changed_when: false
-
-
-# - name: Print
-#   debug:
-#     var: tables_quantity.stdout
 
 - name: For Red Hat OS family
   block:
@@ -246,14 +203,18 @@
     - name: Check that you can connect (GET) to a page and it returns a status 200
       uri:
         url: http://{{ z_ipaddr }}/zabbix/setup.php
+        method: GET
         return_content: true
+        status_code: 200, 404
+        body_format: json
       register: web_result
 #     notify: Reload Apache
 
-#   - name: Print 2
+    - name: Print 2
 #     debug: web_result.stderr
-    - debug:
-        var: web_result.status
+      debug:
+#       var: web_result.json
+        msg: "{{ web_result }}"
 
 #    - name: Starting and enabling apache2
 #      become: true
