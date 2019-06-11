@@ -1,0 +1,50 @@
+---
+- name: Zabbix installation
+  block:
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_os_family }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
+
+    - name: Add Zabbix repositories
+      apt:
+        deb: "{{ zabbix_apt_url }}"
+        state: present
+        update_cache: true
+      register: status
+      until: status is succeeded
+
+    - name: Install Zabbix
+      package:
+        name:
+          - zabbix-server-mysql
+          - zabbix-frontend-php
+          - zabbix-agent
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Install Apache2
+      package:
+        name: apache2
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Starting and enabling Apache2
+      service:
+        name: apache2
+        state: started
+        enabled: true
+
+    - name: Install mysql
+      package:
+        name: mysql-server
+        state: present
+      register: status
+      until: status is succeeded
+  become: true

@@ -1,0 +1,65 @@
+---
+- name: Zabbix installation
+  block:
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_os_family }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
+    - debug:
+        msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
+
+    - name: Add Zabbix repo
+      package:
+        name: "{{ zabbix_yum_url }}"
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Add EPEL repo
+      package:
+        name: epel-release
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Install Zabbix
+      package:
+        name:
+          - zabbix-server-mysql
+          - zabbix-web-mysql
+          - zabbix-agent
+          - zabbix-get
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Install httpd
+      package:
+        name:
+          - httpd
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Starting and enabling httpd
+      service:
+        name: httpd
+        state: started
+        enabled: true
+
+    - name: Add Zabbix repo
+      package:
+        name: "{{ mysql_rep }}"
+        state: present
+      register: status
+      until: status is succeeded
+
+    - name: Install mysql
+      package:
+        name: mysql-server
+        state: present
+      register: status
+      until: status is succeeded
+  become: true
