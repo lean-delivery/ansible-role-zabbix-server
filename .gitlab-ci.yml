@@ -42,15 +42,6 @@ AWS zabbix-server:
   tags:
     - aws
 
-AWS Windows zabbix-server:
-  variables:
-    AWS_REGION: us-east-1
-  stage: deployment test
-  script:
-    - molecule test -s cloud-aws-windows
-  tags:
-    - aws
-
 EPC zabbix-server:
   variables:
     EPC_REGION: EPAM-BY2

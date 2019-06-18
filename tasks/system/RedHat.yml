@@ -1,15 +1,6 @@
 ---
 - name: Zabbix installation
   block:
-    - debug:
-        msg: "{{ hostvars[inventory_hostname].ansible_os_family }}"
-    - debug:
-        msg: "{{ hostvars[inventory_hostname].ansible_distribution }}"
-    - debug:
-        msg: "{{ hostvars[inventory_hostname].ansible_distribution_major_version }}"
-    - debug:
-        msg: "{{ hostvars[inventory_hostname].ansible_distribution_version }}"
-
     - name: Add Zabbix repo
       package:
         name: "{{ zabbix_yum_url }}"
@@ -17,20 +8,12 @@
       register: status
       until: status is succeeded
 
-    - name: Add EPEL repo
-      package:
-        name: epel-release
-        state: present
-      register: status
-      until: status is succeeded
-
     - name: Install Zabbix
-      package:
+      yum:
         name:
           - zabbix-server-mysql
           - zabbix-web-mysql
           - zabbix-agent
-          - zabbix-get
         state: present
       register: status
       until: status is succeeded
@@ -43,23 +26,52 @@
       register: status
       until: status is succeeded
 
+    - name: Adding a timezone to the web config of Zabbix
+      become: true
+      lineinfile:
+        path: '/etc/httpd/conf.d/zabbix.conf'
+        insertafter: '# php_value date.timezone'
+        line: '        php_value date.timezone {{ zabbix_time_zone }}'
+
+    - name: Replacing ( DBHost )
+      replace:
+        dest: '{{ zabbix_config }}'
+        regexp: '^# DBHost=localhost$'
+        replace: 'DBHost=localhost'
+
+    - name: Replacing ( DBPassword )
+      replace:
+        dest: '{{ zabbix_config }}'
+        regexp: '^# DBPassword=$'
+        replace: 'DBPassword=31415'
+
+    - name: Starting and enabling zabbix-server
+      service:
+        name: zabbix-server
+        state: started
+        enabled: true
+
+    - name: Starting and enabling zabbix-agent
+      service:
+        name: zabbix-agent
+        state: started
+        enabled: true
+
     - name: Starting and enabling httpd
       service:
         name: httpd
         state: started
         enabled: true
 
-    - name: Add Zabbix repo
-      package:
-        name: "{{ mysql_rep }}"
-        state: present
-      register: status
-      until: status is succeeded
+    - name: Check front
+      uri:
+        url: http://localhost/zabbix/setup.php
+        method: GET
+        return_content: true
+        status_code: 200, 404
+        body_format: json
+      register: web_result
 
-    - name: Install mysql
-      package:
-        name: mysql-server
-        state: present
-      register: status
-      until: status is succeeded
-  become: true
+    - name: Print 2
+      debug:
+        msg: "{{ web_result }}"
