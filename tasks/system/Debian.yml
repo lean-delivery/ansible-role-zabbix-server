@@ -7,9 +7,16 @@
     register: status
     until: status is succeeded
 
+  - name: Renewing packages list
+    apt:
+      update_cache: true
+    register: status
+    until: status is succeeded
+
   - name: Install Zabbix
     apt:
-      name: zabbix-server-mysql
+      name: 
+        - zabbix-server-mysql
       state: present
     register: status
     until: status is succeeded
@@ -17,7 +24,7 @@
   - name: Install Zabbix front
     apt:
       name: zabbix-frontend-php
-      state: latest
+      state: present
     register: status
     until: status is succeeded
 
@@ -34,6 +41,14 @@
       state: present
     register: status
     until: status is succeeded
+
+#  - name: Importing
+#    mysql_db:
+#      name: zabbix
+#      login_user: zabbix
+#      login_password: 1
+#      state: import
+#      target: /usr/share/doc/zabbix-server-mysql*/create.sql.gz
 
   - name: Adding a timezone to the web config of Zabbix
     become: true
