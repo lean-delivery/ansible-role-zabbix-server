@@ -43,7 +43,7 @@
       replace:
         dest: '{{ zabbix_config }}'
         regexp: '^# DBPassword=$'
-        replace: 'DBPassword=31415'
+        replace: 'DBPassword={{ db_pass }}'
 
     - name: Starting and enabling zabbix-server
       service:

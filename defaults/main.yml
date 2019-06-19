@@ -4,6 +4,8 @@
 zabbix_ver: 4.2
 zabbix_yum_url: "https://repo.zabbix.com/zabbix/{{ zabbix_ver }}/rhel/{{ ansible_distribution_major_version }}/{{ ansible_architecture }}\
                 /zabbix-release-{{ zabbix_ver }}-1.el{{ ansible_distribution_major_version }}.noarch.rpm"
-zabbix_apt_url: "https://repo.zabbix.com/zabbix/{{ zabbix_ver }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_ver }}-1+bionic_all.deb"
+#zabbix_apt_url: "https://repo.zabbix.com/zabbix/{{ zabbix_ver }}/ubuntu/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_ver }}-1+bionic_all.deb"
+zabbix_apt_url: "https://repo.zabbix.com/zabbix/{{ zabbix_ver }}/debian/pool/main/z/zabbix-release/zabbix-release_{{ zabbix_ver }}-1+stretch_all.deb"
 zabbix_config: "/etc/zabbix/zabbix_server.conf"
 zabbix_time_zone: "Europe/Moscow"
+db_pass: 1

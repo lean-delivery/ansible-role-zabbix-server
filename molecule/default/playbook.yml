@@ -4,7 +4,6 @@
   roles:
     - role: lean_delivery.mysql
       mysql_daemon: mariadb
-      mysql_root_username: root
       mysql_root_password: 1
       mysql_databases:
         - name: zabbix
@@ -12,7 +11,7 @@
           collation: utf8_bin
       mysql_users:
         - name: zabbix
-          password: 1
+          password: "{{ db_pass }}"
           priv: "zabbix.*:ALL"
 
     - role: ansible-role-zabbix-server
