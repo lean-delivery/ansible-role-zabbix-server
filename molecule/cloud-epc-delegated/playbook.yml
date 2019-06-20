@@ -11,7 +11,7 @@
           collation: utf8_bin
       mysql_users:
         - name: zabbix
-          password: "{{ db_pass }}"
+          password: 1
           priv: "zabbix.*:ALL"
 
     - role: ansible-role-zabbix-server
