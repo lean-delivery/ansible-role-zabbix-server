@@ -33,8 +33,8 @@
         name: zabbix
         login_user: zabbix
         login_password: 1
-      state: import
-      target: /usr/share/doc/zabbix-server-mysql-*/create.sql.gz
+        state: import
+        target: /usr/share/doc/zabbix-server-mysql-*/create.sql.gz
 
     - name: Adding a timezone to the web config of Zabbix
       lineinfile:
