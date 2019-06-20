@@ -1,2 +1,7 @@
 ---
 # handlers file for zabbix-server
+- name: Reload Apache
+  become: true
+  service:
+    name: apache2
+    state: reloaded

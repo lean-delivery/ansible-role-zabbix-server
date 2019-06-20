@@ -106,6 +106,7 @@
       status_code: 200, 404
       body_format: json
     register: web_result
+    notify: Reload Apache
 
   - name: Print 2
     debug:
