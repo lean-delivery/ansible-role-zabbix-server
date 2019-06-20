@@ -15,8 +15,7 @@
 
   - name: Install Zabbix
     apt:
-      name: 
-        - zabbix-server-mysql
+      name:  zabbix-server-mysql
       state: present
     register: status
     until: status is succeeded
