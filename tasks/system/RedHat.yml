@@ -7,6 +7,7 @@
         state: present
       register: status
       until: status is succeeded
+      become: true
 
     - name: Install Zabbix
       yum:
@@ -17,51 +18,57 @@
         state: present
       register: status
       until: status is succeeded
+      become: true
 
     - name: Install httpd
       package:
-        name:
-          - httpd
+        name: httpd
         state: present
       register: status
       until: status is succeeded
+      become: true
 
     - name: Adding a timezone to the web config of Zabbix
-      become: true
       lineinfile:
         path: '/etc/httpd/conf.d/zabbix.conf'
         insertafter: '# php_value date.timezone'
         line: '        php_value date.timezone {{ zabbix_time_zone }}'
+      become: true
 
     - name: Replacing ( DBHost )
       replace:
         dest: '{{ zabbix_config }}'
         regexp: '^# DBHost=localhost$'
         replace: 'DBHost=localhost'
+      become: true
 
     - name: Replacing ( DBPassword )
       replace:
         dest: '{{ zabbix_config }}'
         regexp: '^# DBPassword=$'
         replace: 'DBPassword={{ db_pass }}'
+      become: true
 
     - name: Starting and enabling zabbix-server
       service:
         name: zabbix-server
         state: started
         enabled: true
+      become: true
 
     - name: Starting and enabling zabbix-agent
       service:
         name: zabbix-agent
         state: started
         enabled: true
+      become: true
 
     - name: Starting and enabling httpd
       service:
         name: httpd
         state: started
         enabled: true
+      become: true
 
     - name: Check front
       uri:

@@ -8,3 +8,4 @@ zabbix_apt_url: "https://repo.zabbix.com/zabbix/{{ zabbix_ver }}/ubuntu/pool/mai
 zabbix_config: "/etc/zabbix/zabbix_server.conf"
 zabbix_time_zone: "Europe/Moscow"
 db_pass: 1
+db_root_pass: 1
