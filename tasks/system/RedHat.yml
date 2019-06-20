@@ -1,95 +1,94 @@
 ---
-- name: Zabbix installation
-  block:
-    - name: Add Zabbix repo
-      package:
-        name: "{{ zabbix_yum_url }}"
-        state: present
-      register: status
-      until: status is succeeded
-      become: true
 
-    - name: Install Zabbix
-      yum:
-        name:
-          - zabbix-server-mysql
-          - zabbix-web-mysql
-          - zabbix-agent
-        state: present
-      register: status
-      until: status is succeeded
-      become: true
+  - name: Add Zabbix repositories
+    package:
+      name: "{{ zabbix_yum_url }}"
+      state: present
+    register: status
+    until: status is succeeded
+    become: true
 
-    - name: Install httpd
-      package:
-        name: httpd
-        state: present
-      register: status
-      until: status is succeeded
-      become: true
+  - name: Install Zabbix
+    yum:
+      name:
+        - zabbix-server-mysql
+        - zabbix-web-mysql
+        - zabbix-agent
+      state: present
+    register: status
+    until: status is succeeded
+    become: true
 
-    - name: Ensure example database exists
-      mysql_db:
-        name: zabbix
-        login_host: localhost
-        login_user: zabbix
-        login_password: 1
-        state: present
-      notify:
-        - create db zabbix
-        - import example database centos
+  - name: Install httpd
+    package:
+      name: httpd
+      state: present
+    register: status
+    until: status is succeeded
+    become: true
 
-    - name: Adding a timezone to the web config of Zabbix
-      lineinfile:
-        path: '/etc/httpd/conf.d/zabbix.conf'
-        insertafter: '# php_value date.timezone'
-        line: '        php_value date.timezone {{ zabbix_time_zone }}'
-      become: true
+  - name: Ensure example database exists
+    mysql_db:
+      name: zabbix
+      login_host: localhost
+      login_user: zabbix
+      login_password: 1
+      state: present
+    notify:
+      - create db zabbix
+      - import zabbix db centos
 
-    - name: Replacing ( DBHost )
-      replace:
-        dest: '{{ zabbix_config }}'
-        regexp: '^# DBHost=localhost$'
-        replace: 'DBHost=localhost'
-      become: true
+  - name: Adding a timezone to the web config of Zabbix
+    lineinfile:
+      path: '/etc/httpd/conf.d/zabbix.conf'
+      insertafter: '# php_value date.timezone'
+      line: '        php_value date.timezone {{ zabbix_time_zone }}'
+    become: true
 
-    - name: Replacing ( DBPassword )
-      replace:
-        dest: '{{ zabbix_config }}'
-        regexp: '^# DBPassword=$'
-        replace: 'DBPassword={{ db_pass }}'
-      become: true
+  - name: Replacing ( DBHost )
+    replace:
+      dest: '{{ zabbix_config }}'
+      regexp: '^# DBHost=localhost$'
+      replace: 'DBHost=localhost'
+    become: true
 
-    - name: Starting and enabling zabbix-server
-      service:
-        name: zabbix-server
-        state: started
-        enabled: true
-      become: true
+  - name: Replacing ( DBPassword )
+    replace:
+      dest: '{{ zabbix_config }}'
+      regexp: '^# DBPassword=$'
+      replace: 'DBPassword={{ db_pass }}'
+    become: true
 
-    - name: Starting and enabling zabbix-agent
-      service:
-        name: zabbix-agent
-        state: started
-        enabled: true
-      become: true
+  - name: Starting and enabling zabbix-server
+    service:
+      name: zabbix-server
+      state: started
+      enabled: true
+    become: true
 
-    - name: Starting and enabling httpd
-      service:
-        name: httpd
-        state: started
-        enabled: true
-      become: true
+  - name: Starting and enabling zabbix-agent
+    service:
+      name: zabbix-agent
+      state: started
+      enabled: true
+    become: true
 
-    - name: Check front
-      uri:
-        url: http://localhost/zabbix/setup.php
-        method: GET
-        return_content: true
-        status_code: 200, 404
-        body_format: json
-      register: web_result
+  - name: Starting and enabling httpd
+    service:
+      name: httpd
+      state: started
+      enabled: true
+    become: true
 
-    - name: Print 2
-      debug:
-        msg: "{{ web_result }}"
+  - name: Check zabbix web page
+    uri:
+      url: http://localhost/zabbix/setup.php
+      method: GET
+      return_content: true
+      status_code: 200, 404
+      body_format: json
+    register: web_result
+
+  - name: Print result of zabbix web page check
+    debug:
+      msg: "{{ web_result }}"

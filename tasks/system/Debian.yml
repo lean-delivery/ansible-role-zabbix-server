@@ -1,5 +1,5 @@
 ---
-  - name: Add Zabbix repositories
+  - name: Adding Zabbix repositories
     apt:
       deb: "{{ zabbix_apt_url }}"
       state: present
@@ -8,14 +8,7 @@
     until: status is succeeded
     become: true
 
-  - name: Renewing packages list
-    apt:
-      update_cache: true
-    register: status
-    until: status is succeeded
-    become: true
-
-  - name: Install Zabbix
+  - name: Install Zabbix server
     apt:
       name:  zabbix-server-mysql
       state: present
@@ -23,7 +16,7 @@
     until: status is succeeded
     become: true
 
-  - name: Install Zabbix front
+  - name: Install Zabbix frontend
     apt:
       name: zabbix-frontend-php
       state: present
@@ -39,7 +32,7 @@
     until: status is succeeded
     become: true
 
-  - name: Install Apache2
+  - name: Install apache2
     package:
       name: apache2
       state: present
@@ -47,7 +40,7 @@
     until: status is succeeded
     become: true
 
-  - name: Ensure example database exists
+  - name: Check if zabbix database exists
     mysql_db:
       name: zabbix
       login_host: localhost
@@ -56,7 +49,7 @@
       state: present
     notify:
       - create db zabbix
-      - import example database ubuntu
+      - import zabbix db ubuntu
 
   - name: Adding a timezone to the web config of Zabbix
     lineinfile:
@@ -99,7 +92,7 @@
       state: started
       enabled: true
 
-  - name: Check  front
+  - name: Check zabbix web page
     uri:
       url: http://localhost/zabbix/setup.php
       method: GET
@@ -109,6 +102,6 @@
     register: web_result
     notify: Reload Apache
 
-  - name: Print 2
+  - name: Print result of zabbix web page check
     debug:
       msg: "{{ web_result }}"

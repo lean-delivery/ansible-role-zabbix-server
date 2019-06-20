@@ -9,12 +9,14 @@
 - name: create db zabbix
   mysql_db:
     name: zabbix
+    encoding: utf8
+    collation: utf8_bin
     login_host: localhost
     login_user: zabbix
     login_password: 1
     state: present
 
-- name: import example database ubuntu
+- name: import zabbix db ubuntu
   mysql_db:
     name: zabbix
     login_host: localhost
@@ -23,7 +25,7 @@
     state: import
     target: /usr/share/doc/zabbix-server-mysql/create.sql.gz
 
-- name: import example database centos
+- name: import zabbix db centos
   mysql_db:
     name: zabbix
     login_host: localhost
