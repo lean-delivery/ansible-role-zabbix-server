@@ -8,6 +8,13 @@
     until: status is succeeded
     become: true
 
+  - name: Apt update
+    apt:
+      update_cache: true
+    register: status
+    until: status is succeeded
+    become: true
+
   - name: Install Zabbix server
     apt:
       name:  zabbix-server-mysql
