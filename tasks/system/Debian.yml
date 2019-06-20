@@ -47,13 +47,13 @@
     until: status is succeeded
     become: true
 
-#  - name: Importing
-#    mysql_db:
-#      name: zabbix
-#      login_user: zabbix
-#      login_password: 1
-#      state: import
-#      target: /usr/share/doc/zabbix-server-mysql*/create.sql.gz
+  - name: Importing
+    mysql_db:
+      name: zabbix
+      login_user: zabbix
+      login_password: 1
+      state: import
+      target: /usr/share/doc/zabbix-server-mysql/create.sql.gz
 
   - name: Adding a timezone to the web config of Zabbix
     lineinfile:

@@ -4,7 +4,7 @@
   roles:
     - role: lean_delivery.mysql
       mysql_daemon: mariadb
-      mysql_root_password: 1
+      mysql_root_password: "{{ db_root_pass }}"
       mysql_databases:
         - name: zabbix
           encoding: utf8
