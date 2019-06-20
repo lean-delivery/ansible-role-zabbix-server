@@ -48,8 +48,10 @@
     become: true
 
   - name: Importing
+    become: true
     mysql_db:
       name: zabbix
+      login_host: localhost
       login_user: zabbix
       login_password: 1
       state: import

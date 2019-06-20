@@ -29,12 +29,14 @@
       become: true
 
     - name: Importing
+      become: true
       mysql_db:
         name: zabbix
+        login_host: localhost
         login_user: zabbix
         login_password: 1
         state: import
-        target: /usr/share/doc/zabbix-server-mysql-*/create.sql.gz
+        target: /usr/share/doc/zabbix-server-mysql-4.2.3/create.sql.gz
 
     - name: Adding a timezone to the web config of Zabbix
       lineinfile:
